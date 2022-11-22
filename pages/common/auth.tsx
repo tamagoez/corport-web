@@ -11,10 +11,8 @@ export default function AuthPage() {
   useEffect(() => {
     if (session) {
       checksettings();
-      if (query.next) router.replace(`${query.next}`);
-      else router.replace("/common/dashboard");
     }
-  }, [session, router]);
+  }, [session]);
   async function checksettings() {
     try {
       const { data, error } = await supabase.functions.invoke(
@@ -22,8 +20,11 @@ export default function AuthPage() {
         {}
       );
       if (error) throw error;
-    } catch (error) {
+      if (query.next) router.replace(`${query.next}`);
+      else router.replace("/common/dashboard");
+    } catch (error: any) {
       console.error(error.message);
+      router.replace(`/common/profile?next=${query.next}`);
     }
   }
   return (

@@ -21,7 +21,7 @@ export function FeedBack() {
       setLong("");
       setEnvdata("");
       setUserid(null);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
     }
   }
