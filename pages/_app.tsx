@@ -34,7 +34,9 @@ function MyApp({
   }, []);
   if (typeof location !== "undefined") {
     console.log(`[_app.tsx] href: ${location.pathname}`);
-    if (!allowurl.includes(location.pathname))
+    const user = supabaseClient.auth.getUser();
+    console.log(`[_app.tsx] user: ${user}`)
+    if (!allowurl.includes(location.pathname) && !user)
       router.replace(`/common/auth?next=${location.pathname}`);
   }
   return (

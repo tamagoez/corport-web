@@ -24,7 +24,8 @@ export default function AuthPage() {
       else router.replace("/common/dashboard");
     } catch (error: any) {
       console.error(error.message);
-      router.replace(`/common/profile?next=${query.next}`);
+      if (query.next) router.replace(`/common/profile?next=${query.next}`);
+      else router.replace(`/common/profile`)
     }
   }
   return (
