@@ -9,7 +9,7 @@ export function FeedBack() {
   const [short, setShort] = useState("");
   const [long, setLong] = useState("");
   const [envdata, setEnvdata] = useState("");
-  const [userid, setUserid] = useState(null);
+  const [userid, setUserid] = useState("");
 
   async function submit() {
     try {
@@ -20,7 +20,7 @@ export function FeedBack() {
       setShort("");
       setLong("");
       setEnvdata("");
-      setUserid(null);
+      setUserid("");
     } catch (error: any) {
       console.error(error.message);
     }
@@ -202,7 +202,7 @@ export function FeedBack() {
               id="userdata"
               disabled={!user?.id}
               onChange={(e) =>
-                e.target.checked ? setUserid(user?.id || null) : setUserid(null)
+                e.target.checked ? setUserid(user?.id || "") : setUserid("")
               }
             />
             <label htmlFor="userdata">
