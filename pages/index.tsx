@@ -32,7 +32,7 @@ export default function Home() {
       </Head>
       <h1>CorPort</h1>
       <div className="centeraligned">
-        <Link href="/common/auth">
+        <Link href="/c/auth">
           <span className="LinkButton">
             {!user ? "ログイン / 新規登録" : "Dashboardに行く"}
           </span>

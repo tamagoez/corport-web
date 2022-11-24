@@ -21,11 +21,12 @@ export default function AuthPage() {
       );
       if (error) throw error;
       if (query.next) router.replace(`${query.next}`);
-      else router.replace("/common/dashboard");
+      else router.replace("/c/dashboard");
     } catch (error: any) {
       console.error(error.message);
-      if (query.next) router.replace(`/common/profile?next=${query.next}`);
-      else router.replace(`/common/profile`)
+      window.localStorage.setItem("noprofile", "true")
+      if (query.next) router.replace(`/c/profile?next=${query.next}`);
+      else router.replace(`/c/profile`)
     }
   }
   return (

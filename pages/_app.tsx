@@ -10,34 +10,47 @@ import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FeedBack } from "../components/FeedBack";
+import { setOnline } from "../scripts/edge";
 // import { SetOnline } from "../scripts/userdata";
 import "../styles/globals.css";
 import "../styles/twemoji.css";
-const { DateTime } = require("luxon");
 function MyApp({
   Component,
   pageProps,
 }: AppProps<{
   initialSession: Session;
 }>) {
-  const allowurl = ["/", "/common/auth"];
+  const allowurl = ["/", "/c/auth"];
   const router = useRouter();
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
-  useEffect(() => {
-    const intervalId = setInterval(async () => {
+  const user = supabaseClient.auth.getUser();
+
+  async function setonlineedge() {
+    const {
+      data: { user },
+    } = await supabaseClient.auth.getUser();
+    if (user) {
+      // console.log(user)
       const { error } = await supabaseClient.functions.invoke("setonline", {});
       if (error) console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      setOnline();
     }, 20000);
     return () => {
       clearInterval(intervalId);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   if (typeof location !== "undefined") {
     console.log(`[_app.tsx] href: ${location.pathname}`);
-    const user = supabaseClient.auth.getUser();
-    console.log(`[_app.tsx] user: ${user}`)
+    console.log(`[_app.tsx] user: ${user}`);
     if (!allowurl.includes(location.pathname) && !user)
-      router.replace(`/common/auth?next=${location.pathname}`);
+      router.replace(`/c/auth?next=${location.pathname}`);
   }
   return (
     <SessionContextProvider
