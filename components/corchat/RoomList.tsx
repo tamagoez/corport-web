@@ -2,21 +2,14 @@ import { useEffect, useState } from "react";
 import { getOnline, getRoomList } from "../../scripts/edge";
 import { useSession } from "@supabase/auth-helpers-react";
 import { getUsername } from "../../scripts/user";
+import { getAllRoomsData } from "../../scripts/corchat/fetchroom";
 
 export default function RoomList() {
   const session = useSession();
   const [roomlist, setRoomlist] = useState([]);
-  useEffect(() => {
-    if (session) getRoomid();
-  }, [session]);
-  async function getRoomid() {
-    setRoomlist(await getRoomList());
-  }
   return (
     <>
-      {roomlist.map((x) => (
-        <ListComponent key={x.roomid} roomid={x.roomid} />
-      ))}
+    <p>まだ作ってない</p>
     </>
   );
 }
