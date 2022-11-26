@@ -18,8 +18,7 @@ export async function getProfileSet() {
       .select("handleid, username")
       .eq("userid", user.id);
     if (error) throw error;
-    if (data.haneleid && data.username) return true;
-    else return false;
+    return true;
   } catch (error) {
     console.error(error);
   }
