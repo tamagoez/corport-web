@@ -15,6 +15,7 @@ export async function getLastChat(roomid: string) {
     return data.text;
   } catch (error) {
     console.error(error);
+    return "なんもない";
   }
 }
 
@@ -55,7 +56,7 @@ export async function getAllRoomsId() {
     if (!user) return;
     const { data, error } = await supabase
       .from("ch_members")
-      .select("id")
+      .select("roomid")
       .eq("userid", user.id);
     if (error) throw error;
     return data;
@@ -68,12 +69,13 @@ export async function getRoomData(roomid: string) {
   try {
     const { data, error } = await supabase
       .from("ch_rooms")
-      .select("name, type, permit")
+      .select("id, name, type, permit")
       .eq("id", roomid)
       .single();
     if (error) throw error;
     const lastchat = await getLastChat(roomid);
     return {
+      id: data.id,
       roomname: data.name,
       permit: data.permit,
       type: data.type,
@@ -91,16 +93,21 @@ export async function getAllRoomsData() {
     } = await supabase.auth.getUser();
     if (!user) return;
     const ids = await getAllRoomsId();
-    let lists = [];
+    let lists: (
+      | {
+          id: string;
+          roomname: string;
+          permit: boolean;
+          type: string;
+          lastchat: string;
+        }
+      | undefined
+    )[] = [];
     ids?.forEach(async (e) => {
-      lists.push(await getRoomData(e.id));
+      lists.push(await getRoomData(e.roomid));
     });
-    const { data, error } = await supabase
-      .from("ch_members")
-      .select("id")
-      .eq("userid", user.id);
-    if (error) throw error;
-    return data;
+    if (!lists) throw lists;
+    return lists;
   } catch (error) {
     console.error(error);
   }

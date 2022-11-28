@@ -24,21 +24,33 @@ export default function Profile() {
         renderprofile(res);
       });
   }, [userid]);
-  
+
   function checkallinput() {
     if (typeof document !== "undefined") {
-      const usernameinput = (document.getElementById("inputusername") as HTMLInputElement).value;
-      const handleidinput = (document.getElementById("inputhandleid") as HTMLInputElement).value;
-      if (usernameinput && handleidinput) {return true } else {return false}
+      const usernameinput = (
+        document.getElementById("inputusername") as HTMLInputElement
+      ).value;
+      const handleidinput = (
+        document.getElementById("inputhandleid") as HTMLInputElement
+      ).value;
+      if (usernameinput && handleidinput) {
+        return true;
+      } else {
+        return false;
+      }
     } else return false;
   }
-  
+
   function renderprofile(data: any) {
-    setUsername(data.username);
-    setHandleid(data.displayhandleid);
-    setBirthday(data.birthday);
-    if (checkallinput()) setCanmove(true);
-    setEditedb(true);
+    if (data) {
+      setUsername(data.username);
+      setHandleid(data.displayhandleid);
+      setBirthday(data.birthday);
+    }
+    if (checkallinput()) {
+      setCanmove(true);
+      setEditedb(true);
+    }
   }
 
   function checkmove() {

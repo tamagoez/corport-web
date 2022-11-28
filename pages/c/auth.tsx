@@ -2,33 +2,33 @@ import { Auth, ThemeSupa } from "@supabase/auth-ui-react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { getProfileSet } from "../../scripts/c/auth";
 
 export default function AuthPage() {
   const session = useSession();
   const supabase = useSupabaseClient();
   const router = useRouter();
   const query = router.query;
+
   useEffect(() => {
     if (session) {
       checksettings();
     }
   }, [session]);
+
   async function checksettings() {
-    try {
-      const { data, error } = await supabase.functions.invoke(
-        "getsettings",
-        {}
-      );
-      if (error) throw error;
+    const alset = await getProfileSet();
+    console.log(`[checksettings] alset: ${alset}`);
+    if (alset === true) {
       if (query.next) router.replace(`${query.next}`);
       else router.replace("/c/dashboard");
-    } catch (error: any) {
-      console.error(error.message);
-      window.localStorage.setItem("noprofile", "true")
+    } else {
+      window.localStorage.setItem("noprofile", "true");
       if (query.next) router.replace(`/c/profile?next=${query.next}`);
-      else router.replace(`/c/profile`)
+      else router.replace(`/c/profile`);
     }
   }
+
   return (
     <>
       {!session ? (

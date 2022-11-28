@@ -38,3 +38,17 @@ export async function getUsername(userid: string) {
     console.error(error);
   }
 }
+
+export async function getUuid(handleid: string) {
+  try {
+    const { data, error } = await supabase
+      .from("profile")
+      .select("userid")
+      .eq("handleid", handleid)
+      .single();
+    if (error) throw error;
+    return data.userid;
+  } catch (error) {
+    console.error(error);
+  }
+}
