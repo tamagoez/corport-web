@@ -59,6 +59,7 @@ export async function getAllRoomsId() {
       .select("roomid")
       .eq("userid", user.id);
     if (error) throw error;
+    console.dir(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -104,9 +105,14 @@ export async function getAllRoomsData() {
       | undefined
     )[] = [];
     ids?.forEach(async (e) => {
-      lists.push(await getRoomData(e.roomid));
+      const roomdata = await getRoomData(e.roomid);
+      lists.push(roomdata);
+      console.log(`[getAllRoomsData] roomdata:`);
+      console.dir(roomdata);
     });
     if (!lists) throw lists;
+    console.log(`[getAllRoomsData] lists: ${lists}`);
+    console.dir(lists);
     return lists;
   } catch (error) {
     console.error(error);

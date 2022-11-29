@@ -24,7 +24,9 @@ function ListComponents() {
             {x.roomname} - {x.lastchat}
           </div>
         ))
-      ) : null}
+      ) : (
+        "null"
+      )}
     </>
   );
 }
