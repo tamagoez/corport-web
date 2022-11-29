@@ -1,6 +1,6 @@
 import { useUser } from "@supabase/auth-helpers-react";
 import { getAllRoomsData } from "../../scripts/corchat/fetchroom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function RoomList() {
   return (
@@ -12,15 +12,8 @@ export default function RoomList() {
 
 function ListComponents() {
   const user = useUser();
-  const [listdata, setListdata] = useState<any>();
-  useEffect(() => {
-    if (user) {
-      getAllRoomsData().then((data) => {
-        setListdata(data);
-        console.log(data);
-      });
-    }
-  }, [user]);
+  // const [listdata, setListdata] = useState<any>();
+  const listdata = useMemo<any>(async () => await getAllRoomsData(), []);
   return (
     <>
       {!listdata ? (

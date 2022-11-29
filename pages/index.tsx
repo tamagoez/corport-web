@@ -11,6 +11,12 @@ export default function Home() {
         h1 {
           text-align: center;
         }
+        ul {
+          width: 100%;
+          padding: 0;
+          text-align: center;
+          list-style: none;
+        }
         .centeraligned {
           text-align: center;
         }
@@ -32,11 +38,22 @@ export default function Home() {
       </Head>
       <h1>CorPort</h1>
       <div className="centeraligned">
-        <Link href="/c/auth">
-          <span className="LinkButton">
-            {!user ? "ログイン / 新規登録" : "Dashboardに行く"}
-          </span>
-        </Link>
+        <ul>
+          <li>
+            <Link href="/c/auth">
+              <span className="LinkButton">
+                {!user ? "ログイン / 新規登録" : "Dashboardに行く"}
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link href="/c/password">
+              <span className="LinkButton">
+                {!user ? "パスワードリカバリー" : "パスワードを再設定"}
+              </span>
+            </Link>
+          </li>
+        </ul>
       </div>
     </>
   );

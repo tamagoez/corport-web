@@ -20,21 +20,10 @@ function MyApp({
 }: AppProps<{
   initialSession: Session;
 }>) {
-  const allowurl = ["/", "/c/auth"];
+  const allowurl = ["/", "/c/auth", "/c/passwordrecovery"];
   const router = useRouter();
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
   const user = supabaseClient.auth.getUser();
-
-  async function setonlineedge() {
-    const {
-      data: { user },
-    } = await supabaseClient.auth.getUser();
-    if (user) {
-      // console.log(user)
-      const { error } = await supabaseClient.functions.invoke("setonline", {});
-      if (error) console.error(error);
-    }
-  }
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -44,6 +33,21 @@ function MyApp({
       clearInterval(intervalId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    supabaseClient.auth.onAuthStateChange(async (event, session) => {
+      console.log(`[onAuthStateChange] event: ${event}`);
+      if (event == "PASSWORD_RECOVERY") {
+        const newPassword = prompt("新しいパスワードを入力してください");
+        const { data, error } = await supabaseClient.auth.updateUser({
+          password: newPassword!,
+        });
+
+        if (data) alert("パスワードがアップデートされました");
+        if (error) alert("アップデート中にエラーが発生しました");
+      }
+    });
   }, []);
 
   if (typeof location !== "undefined") {
