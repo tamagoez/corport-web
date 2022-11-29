@@ -18,13 +18,13 @@ function ListComponents() {
     <>
       {!listdata ? (
         <p>Loading</p>
-      ) : (
+      ) : Array.isArray(listdata) ? (
         listdata.map((x: any) => (
           <div key={x.id} className="roomlist">
             {x.roomname} - {x.lastchat}
           </div>
         ))
-      )}
+      ) : null}
     </>
   );
 }
