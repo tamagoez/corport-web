@@ -5,7 +5,7 @@ const supabase = createBrowserSupabaseClient();
 export async function getLastChat(roomid: string) {
   try {
     const { data, error } = await supabase
-      .from("ch_chat")
+      .from("ch_chats")
       .select("text")
       .eq("roomid", roomid)
       .order("id", { ascending: true })
@@ -37,7 +37,7 @@ export async function getUnreadCount(roomid: string) {
   try {
     const readid = await getReadId(roomid);
     const { data, error } = await supabase
-      .from("ch_chat")
+      .from("ch_chats")
       .select("*", { count: "exact", head: true })
       .eq("roomid", roomid)
       .gte("id", readid);

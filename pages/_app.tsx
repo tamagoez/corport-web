@@ -56,12 +56,30 @@ function MyApp({
     if (!allowurl.includes(location.pathname) && !user)
       router.replace(`/c/auth?next=${location.pathname}`);
   }
+  if (typeof document !== "undefined")
+    document.body.addEventListener(
+      "click",
+      () => {
+        prepareSound();
+      },
+      { once: true }
+    );
+  function prepareSound() {
+    const notifysound = document.getElementById(
+      "notifysound"
+    ) as HTMLAudioElement;
+    notifysound.play();
+    notifysound.pause();
+  }
   return (
     <SessionContextProvider
       supabaseClient={supabaseClient}
       initialSession={pageProps.initialSession}
     >
       <Component {...pageProps} />
+      <audio id="notifysound" preload="auto">
+        <source src="/sound/xylophone.mp3" type="audio/mp3" />
+      </audio>
       <FeedBack />
     </SessionContextProvider>
   );
