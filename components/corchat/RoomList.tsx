@@ -16,10 +16,10 @@ export default function RoomList() {
 function Lists() {
   const user = useUser();
   const router = useRouter();
-  const [listdata, setListdata] = useState([]);
+  const [listdata, setListdata] = useState<object[]>([]);
   async function setData() {
     const getdata = await getAllRoomsId();
-    setListdata(getdata);
+    if (getdata !== undefined) setListdata(getdata);
   }
   useEffect(() => {
     setData();
@@ -38,13 +38,21 @@ function Lists() {
 }
 
 function ListsComponent({ roomid }: { roomid: string }) {
-  const [roomdata, setRoomdata] = useState();
+  interface RoomInterface {
+    id: string;
+    roomname: string;
+    permit: boolean;
+    type: string;
+    lastchat: string;
+  }
+  const [roomdata, setRoomdata] = useState<RoomInterface>();
   async function setData() {
     const getdata = await getRoomData(roomid);
     setRoomdata(getdata);
   }
   useEffect(() => {
     setData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
