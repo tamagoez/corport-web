@@ -3,6 +3,7 @@ import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { getProfileSet } from "../../scripts/c/auth";
+import { BarLoader } from "react-spinners";
 
 export default function AuthPage() {
   const session = useSession();
@@ -79,7 +80,12 @@ export default function AuthPage() {
         />
       ) : (
         <>
-          <h2>Loading...</h2>
+          <BarLoader
+            color="#36d7b7"
+            height={5}
+            speedMultiplier={1}
+            width={window.innerWidth}
+          />
         </>
       )}
     </>

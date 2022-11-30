@@ -3,6 +3,7 @@ import { getAllRoomsId, getRoomData } from "../../scripts/corchat/fetchroom";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { HashLoader } from "react-spinners";
 
 export default function RoomList() {
   return (
@@ -48,7 +49,7 @@ function ListsComponent({ roomid }: { roomid: string }) {
   return (
     <>
       {!roomdata ? (
-        <p>Loading</p>
+        <HashLoader color="#36d7b7" speedMultiplier={1.7} />
       ) : (
         <Link href={`/corchat/${roomdata.id}`}>
           <div className="roomlist">
