@@ -1,31 +1,60 @@
 import { useUser } from "@supabase/auth-helpers-react";
-import { getAllRoomsData } from "../../scripts/corchat/fetchroom";
-import { useEffect, useMemo, useState } from "react";
+import { getAllRoomsId, getRoomData } from "../../scripts/corchat/fetchroom";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function RoomList() {
   return (
     <>
-      <ListComponents />
+      <Lists />
     </>
   );
 }
 
-function ListComponents() {
+function Lists() {
   const user = useUser();
-  // const [listdata, setListdata] = useState<any>();
-  const listdata = useMemo<any>(async () => await getAllRoomsData(), []);
+  const router = useRouter();
+  const [listdata, setListdata] = useState([]);
+  async function setData() {
+    const getdata = await getAllRoomsId();
+    setListdata(getdata);
+  }
+  useEffect(() => {
+    setData();
+  }, [router]);
   return (
-    <>
+    <div>
       {!listdata ? (
         <p>Loading</p>
-      ) : Array.isArray(listdata) ? (
-        listdata.map((x: any) => (
-          <div key={x.id} className="roomlist">
-            {x.roomname} - {x.lastchat}
-          </div>
-        ))
       ) : (
-        "null"
+        listdata.map((x: any) => (
+          <ListsComponent key={x.roomid} roomid={x.roomid} />
+        ))
+      )}
+    </div>
+  );
+}
+
+function ListsComponent({ roomid }: { roomid: string }) {
+  const [roomdata, setRoomdata] = useState();
+  async function setData() {
+    const getdata = await getRoomData(roomid);
+    setRoomdata(getdata);
+  }
+  useEffect(() => {
+    setData();
+  }, []);
+  return (
+    <>
+      {!roomdata ? (
+        <p>Loading</p>
+      ) : (
+        <Link href={`/corchat/${roomdata.id}`}>
+          <div className="roomlist">
+            <p>{roomdata.roomname}</p>
+          </div>
+        </Link>
       )}
     </>
   );

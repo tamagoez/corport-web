@@ -110,10 +110,9 @@ export async function getAllRoomsData() {
       console.log(`[getAllRoomsData] roomdata:`);
       console.dir(roomdata);
     });
-    if (!lists) throw lists;
     console.log(`[getAllRoomsData] lists: ${lists}`);
     console.dir(lists);
-    return lists;
+    if (lists) return lists;
   } catch (error) {
     console.error(error);
   }
