@@ -1,5 +1,5 @@
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import { getProfile, setProfile } from "../../scripts/user";
+import { getProfile, setProfile, setSettings } from "../../scripts/user";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -71,6 +71,7 @@ export default function Profile() {
       }).then((res) => {
         if (res) {
           window.localStorage.removeItem("noprofile");
+          setSettings({});
           router.replace("/c/dashboard");
         }
       });

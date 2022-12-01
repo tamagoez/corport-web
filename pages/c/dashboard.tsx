@@ -19,6 +19,9 @@ export default function Dashboard() {
         <li>
           <Link href="/corchat">CorChat</Link>
         </li>
+        <li>
+          <Link href="/c/profile">プロフィール</Link>
+        </li>
       </ul>
     </>
   );

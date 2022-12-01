@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { getProfileSet } from "../../scripts/c/auth";
 import { BarLoader } from "react-spinners";
+import { getSettings } from "../../scripts/user";
 
 export default function AuthPage() {
   const session = useSession();
@@ -13,9 +14,14 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (session) {
+      setsettings();
       checksettings();
     }
   }, [session]);
+
+  async function setsettings() {
+    getSettings();
+  }
 
   async function checksettings() {
     const alset = await getProfileSet();

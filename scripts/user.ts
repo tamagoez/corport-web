@@ -52,3 +52,45 @@ export async function getUuid(handleid: string) {
     console.error(error);
   }
 }
+
+export async function getSettings() {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data, error } = await supabase
+      .from("settings")
+      .select()
+      .eq("userid", user.id)
+      .single();
+    if (error) throw error;
+    const jsonString = JSON.stringify(data);
+    if (typeof window !== "undefined") window.localStorage.setItem("settings", jsonString)
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function setSettings(setdata: any) {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data, error } = await supabase.from("settings").upsert({ userid: user.id, ...setdata}).select();
+    if (error) throw error;
+    const jsonString = JSON.stringify(data);
+    if (typeof window !== "undefined") window.localStorage.setItem("settings", jsonString)
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export function getSettingByKey(key: string) {
+  if (typeof window === "undefined") return undefined;
+  const getdata = JSON.parse(window.localStorage.getItem("settings")!);
+  return getdata[key]
+}
