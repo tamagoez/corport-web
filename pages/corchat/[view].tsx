@@ -33,7 +33,7 @@ export default function ChatRoom() {
     type: string;
     lastchat: string;
   }
-  const [roomlist, setRoomlist] = useState<object[]>([]);
+  const [roomlist, setRoomlist] = useState<RoomInterface[]>([]);
   async function fetchRoom() {
     const data = await getAllRoomsData();
     if (data) setRoomlist(data);
@@ -44,7 +44,9 @@ export default function ChatRoom() {
   // ルーム取得
   // 取得された奴はprop投げられるぅ
   useEffect(() => {
-    if (roomlist.length === 0) { fetchRoom() };
+    if (roomlist.length === 0) {
+      fetchRoom();
+    }
   }, []);
 
   // サイズ変更
