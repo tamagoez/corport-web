@@ -94,19 +94,16 @@ export async function getAllRoomsData() {
     } = await supabase.auth.getUser();
     if (!user) return;
     const ids = await getAllRoomsId();
-    let lists: (
-      | {
-          id: string;
-          roomname: string;
-          permit: boolean;
-          type: string;
-          lastchat: string;
-        }
-      | undefined
-    )[] = [];
+    let lists: {
+      id: string;
+      roomname: string;
+      permit: boolean;
+      type: string;
+      lastchat: string;
+    }[] = [];
     ids?.forEach(async (e) => {
       const roomdata = await getRoomData(e.roomid);
-      lists.push(roomdata);
+      lists.push(roomdata!);
       console.log(`[getAllRoomsData] roomdata:`);
       console.dir(roomdata);
     });

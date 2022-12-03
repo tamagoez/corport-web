@@ -36,54 +36,41 @@ export default function AuthPage() {
     }
   }
 
+  async function loginproc() {
+    try {
+      const email = (document.getElementById('emailinput') as HTMLInputElement).value
+      const password = (document.getElementById('passwordinput') as HTMLInputElement).value
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      })
+      if (error) throw error;
+      console.log("[Auth] Success!")
+      console.dir(data)
+    } catch (error: any) {
+      console.error(error)
+      alert(error.message)
+    }
+  }
+
+  async function signInWithTwitter() {
+    try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'twitter',
+    })
+    if (error) throw error;
+      console.log("[Auth] Success!")
+      console.dir(data)
+    } catch (error: any) {
+      console.error(error)
+      alert(error.message)
+    }
+  }
+
   return (
     <>
       {!session ? (
-        <Auth
-          supabaseClient={supabase}
-          appearance={{ theme: ThemeSupa }}
-          theme="default"
-          localization={{
-            variables: {
-              sign_up: {
-                email_label: "メールアドレス",
-                password_label: "パスワードを作成",
-                email_input_placeholder: "XXXXXXX@YYYYYY.ZZZ",
-                password_input_placeholder: "XXXXXXXXXXXXX",
-                button_label: "新規登録",
-                social_provider_text: "に登録する",
-                link_text: "アカウントをお持ちではありませんか？ 新規登録する",
-              },
-              sign_in: {
-                email_label: "メールアドレス",
-                password_label: "あなたのパスワード",
-                email_input_placeholder: "XXXXXXX@YYYYYY.ZZZ",
-                password_input_placeholder: "XXXXXXXXXXXXX",
-                button_label: "サインイン",
-                social_provider_text: "に登録する",
-                link_text: "アカウントをお持ちですか? ログインする",
-              },
-              magic_link: {
-                email_input_label: "Email address",
-                email_input_placeholder: "Your email address",
-                button_label: "Send Magic Link",
-                link_text: "Send a magic link email",
-              },
-              forgotten_password: {
-                email_label: "Email address",
-                password_label: "Your Password",
-                email_input_placeholder: "Your email address",
-                button_label: "Send reset password instructions",
-                link_text: "パスワードをお忘れの方",
-              },
-              update_password: {
-                password_label: "New password",
-                password_input_placeholder: "Your new password",
-                button_label: "Update password",
-              },
-            },
-          }}
-        />
+        <div><label htmlFor="emailinput">メールアドレス</label><input type="email" id="emailinput" autoComplete="email" /><label htmlFor="passwordinput">パスワード</label><input type="password" id="passwordinput" autoComplete="current-password" /><button onClick={() => loginproc()}>ログイン</button><button onClick={() => signInWithTwitter()}>Twitterで認証</button></div>
       ) : (
         <>
           <BarLoader

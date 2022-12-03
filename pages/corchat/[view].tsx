@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 import DoublePage from "../../components/corchat/view/doublepage";
 import SinglePage from "../../components/corchat/view/singlepage";
+import {
+  getAllRoomsData,
+  getAllRoomsId,
+  getRoomData,
+} from "../../scripts/corchat/fetchroom";
 
 export default function ChatRoom() {
   // 変数設定だぜ
@@ -21,21 +26,42 @@ export default function ChatRoom() {
     height: 0,
   });
 
+  interface RoomInterface {
+    id: string;
+    roomname: string;
+    permit: boolean;
+    type: string;
+    lastchat: string;
+  }
+  const [roomlist, setRoomlist] = useState<object[]>([]);
+  async function fetchRoom() {
+    const data = await getAllRoomsData();
+    if (data) setRoomlist(data);
+    console.log("[fetchroom] かんりょ～");
+    console.dir(roomlist.length);
+  }
+
+  // ルーム取得
+  // 取得された奴はprop投げられるぅ
+  useEffect(() => {
+    if (roomlist.length === 0) { fetchRoom() };
+  }, []);
+
   // サイズ変更
   useEffect(() => {
     if (typeof window !== "undefined") {
       const handleResize = () => {
         if (window.innerWidth < 800) {
-          setViewtype("single");
+          if (viewtype !== "single") setViewtype("single");
         } else {
-          setViewtype(originalviewtype);
+          if (viewtype !== originalviewtype) setViewtype(originalviewtype);
         }
       };
       window.addEventListener("resize", handleResize);
       handleResize();
       return () => window.removeEventListener("resize", handleResize);
     }
-  }, []);
+  }, [viewtype]);
 
   return (
     <>
@@ -48,9 +74,9 @@ export default function ChatRoom() {
         cssOverride={{ zIndex: 9999 }}
       />
       {viewtype === "single" ? (
-        <SinglePage roomid={view1} />
+        <SinglePage roomslist={roomlist} roomid={view1} />
       ) : (
-        <DoublePage roomid1={view1} roomid2={view2} />
+        <DoublePage roomslist={roomlist} roomid1={view1} roomid2={view2} />
       )}
     </>
   );

@@ -1,73 +1,73 @@
 import { useUser } from "@supabase/auth-helpers-react";
-import { getAllRoomsId, getRoomData } from "../../scripts/corchat/fetchroom";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { HashLoader } from "react-spinners";
 
-export default function RoomList({ row }: { row: number }) {
+export default function RoomList({
+  roomslist,
+  row,
+}: {
+  roomslist: object[];
+  row: number;
+}) {
   const user = useUser();
   const router = useRouter();
-  const [listdata, setListdata] = useState<object[]>([]);
-  async function setData() {
-    const getdata = await getAllRoomsId();
-    if (getdata !== undefined) setListdata(getdata);
-  }
-  useEffect(() => {
-    setData();
-  }, [router]);
+  console.log(`[RoomList]`);
+  console.dir(roomslist);
   return (
     <div>
-      {!listdata ? (
+      {roomslist.length === 0 ? (
         <p>Loading</p>
       ) : (
-        listdata.map((x: any) => (
-          <ListsComponent key={x.roomid} roomid={x.roomid} row={row} />
+        roomslist.map((x: any) => (
+          <ListsComponent key={x.roomid} roomprop={x} row={row} />
         ))
       )}
     </div>
   );
 }
 
-function ListsComponent({ roomid, row }: { roomid: string; row: number }) {
-  interface RoomInterface {
-    id: string;
-    roomname: string;
-    permit: boolean;
-    type: string;
-    lastchat: string;
-  }
+interface RoomInterface {
+  id: string;
+  roomname: string;
+  permit: boolean;
+  type: string;
+  lastchat: string;
+}
+function ListsComponent({
+  roomprop,
+  row,
+}: {
+  roomprop: RoomInterface;
+  row: number;
+}) {
+  console.log(`[ListsComponent] roomでーた: `);
+  console.dir(roomprop);
+  const router = useRouter();
 
   let viewurl = "/corchat/list-list";
   if (typeof window !== "undefined")
     viewurl = window.location.pathname.slice(9) as string;
   const [rurl, setRurl] = useState<string>(viewurl);
+  const roomdata = roomprop;
 
-  const [roomdata, setRoomdata] = useState<RoomInterface>();
-  async function setData() {
-    const getdata = await getRoomData(roomid);
-    setRoomdata(getdata);
+  function redirectURL() {
     let viewsplit = viewurl.split("-");
-    viewsplit[row - 1] = getdata?.id;
+    viewsplit[row - 1] = roomdata!.id;
     let view1 = viewsplit[0];
     let view2 = viewsplit[1];
-    setRurl(`/corchat/${view1}-${view2}`);
+    router.push(`/corchat/${view1}-${view2}`);
   }
-  useEffect(() => {
-    setData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>
       {!roomdata ? (
         <HashLoader color="#36d7b7" speedMultiplier={1.7} />
       ) : (
-        <Link href={rurl}>
-          <div className="roomlist">
-            <p>{roomdata.roomname}</p>
-          </div>
-        </Link>
+        <div className="roomlist" onClick={() => redirectURL()}>
+          <p>{roomdata.roomname}</p>
+        </div>
       )}
     </>
   );
