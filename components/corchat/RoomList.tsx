@@ -62,6 +62,11 @@ function ListsComponent({
 
   return (
     <>
+      <style jsx>{`
+        .roomlist {
+          cursor: pointer;
+        }
+      `}</style>
       {!roomdata ? (
         <HashLoader color="#36d7b7" speedMultiplier={1.7} />
       ) : (

@@ -21,6 +21,7 @@ export default function DoublePage({
       <style jsx>{`
         .chatflex {
           display: flex;
+          height: 100%;
         }
         .coremenu {
           height: 100%;
@@ -29,6 +30,8 @@ export default function DoublePage({
         .chatframe {
           height: 100%;
           width: 46%;
+          border: 1px solid #000000;
+          border-radius: 10px;
         }
       `}</style>
       <div className="chatflex">

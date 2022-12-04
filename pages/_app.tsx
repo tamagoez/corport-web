@@ -23,9 +23,9 @@ function MyApp({
   const allowurl = ["/", "/c/auth", "/c/passwordrecovery"];
   const router = useRouter();
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
-  const user = supabaseClient.auth.getUser();
 
   useEffect(() => {
+    checkvalid();
     const intervalId = setInterval(async () => {
       setOnline();
     }, 20000);
@@ -50,12 +50,16 @@ function MyApp({
     });
   }, []);
 
-  if (typeof location !== "undefined") {
+  async function checkvalid() {
+    const {
+      data: { user },
+    } = await supabaseClient.auth.getUser();
     console.log(`[_app.tsx] href: ${location.pathname}`);
     console.log(`[_app.tsx] user: ${user}`);
     if (!allowurl.includes(location.pathname) && !user)
       router.replace(`/c/auth?next=${location.pathname}`);
   }
+
   if (typeof document !== "undefined")
     document.body.addEventListener(
       "click",

@@ -25,6 +25,7 @@ export default function ChatRoom() {
     width: 0,
     height: 0,
   });
+  const [loading, setLoading] = useState<boolean>(true);
 
   interface RoomInterface {
     id: string;
@@ -39,6 +40,7 @@ export default function ChatRoom() {
     if (data) setRoomlist(data);
     console.log("[fetchroom] かんりょ～");
     console.dir(roomlist.length);
+    setLoading(false);
   }
 
   // ルーム取得
@@ -72,8 +74,8 @@ export default function ChatRoom() {
         height={4}
         speedMultiplier={1}
         width={"100%"}
-        loading={true}
-        cssOverride={{ zIndex: 9999 }}
+        loading={loading}
+        cssOverride={{ zIndex: 9999, position: "fixed", top: 0 }}
       />
       {viewtype === "single" ? (
         <SinglePage roomslist={roomlist} roomid={view1} />
